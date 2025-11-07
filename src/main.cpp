@@ -8,15 +8,15 @@
 // The file turn_imu.cpp should be compiled separately.
 // We just declare the functions we call (prototypes) and link to them.
 void turn_by_deg(pros::Imu& imu,
-                 pros::Motor* left[],  int left_n,
-                 pros::Motor* right[], int right_n,
-                 double delta_deg);
+  pros::Motor* left[],  int left_n,
+  pros::Motor* right[], int right_n,
+  double delta_deg);
 void turn_right_90(pros::Imu& imu,
-                   pros::Motor* left[], int left_n,
-                   pros::Motor* right[], int right_n);
+  pros::Motor* left[], int left_n,
+  pros::Motor* right[], int right_n);
 void turn_left_90(pros::Imu& imu,
-                  pros::Motor* left[], int left_n,
-                  pros::Motor* right[], int right_n);
+  pros::Motor* left[], int left_n,
+  pros::Motor* right[], int right_n);
 
 // ---------------------------
 // Device setup (UPDATE PORTS TO MATCH YOUR WIRING)
