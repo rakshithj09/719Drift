@@ -7,8 +7,6 @@
 // --- DO NOT include turn_imu.cpp here ---
 // The file turn_imu.cpp should be compiled separately.
 // We just declare the functions we call (prototypes) and link to them.
-//Hello
-
 void turn_by_deg(pros::Imu& imu,
                  pros::Motor* left[],  int left_n,
                  pros::Motor* right[], int right_n,
