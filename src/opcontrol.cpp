@@ -7,8 +7,11 @@
 
 // 
 void opcontrol() {
+	pros::adi::DigitalOut piston('A'); // replace 'A' with the port used on your brain
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	
+	pros::Motor front_bottom(7);// blue motor
+	pros::Motor back(8); // green motor
+	pros::Motor front_top(9); // green motor
 
 
 	pros::MotorGroup left_mg({1, -2, -3});
@@ -17,7 +20,16 @@ void opcontrol() {
 	// Replace the numbers with your actual motor ports.
 
 	while (true) {
-
+		pros::Controller master(pros::E_CONTROLLER_MASTER);
+		/*bool pistonState = false;
+	  
+		// Toggle piston when button A is pressed
+		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+				pistonState = !pistonState;
+				piston.set_value(pistonState);
+			}
+		  
+			  pros::delay(20);
 
 		pros::lcd::print(0, "%d %d %d",
 		                 (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -26,8 +38,61 @@ void opcontrol() {
 		// Displays which LCD buttons are pressed on line 0.
 		// 0s and 1s show if left, center, or right buttons are currently pressed.
 		// This is for testing; it’s not needed for driving.
+		
+		// 5 watt top is clockwise
+		// 5 watt watt back clockwise
+		// 11 watt counterclockwise
 
-		// --- Joystick control setup (Arcade Drive) ---
+		// R2 into basket
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+			front_bottom.move(127);
+			front_top.move(127);
+			back.move(-127);
+		  }
+		else {
+			front_bottom.move(0);
+			front_top.move(0);
+			back.move(0);
+		  }
+		// L2 Outtake from basket to bottom goal
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+			front_bottom.move(-127);
+			back.move(127);
+		  }
+		else {
+			front_bottom.move(0);
+			back.move(0);
+		  } 
+		// R1 Basket to middle
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+			front_bottom.move(-127);
+			front_top.move(127);
+			back.move(127);
+		  }
+		else {
+			front_bottom.move(0);
+			front_top.move(0);
+			back.move(0);
+		  }
+		// L1 Basket to Top
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+			front_bottom.move(-127);
+			front_top.move(-127);
+			back.move(127);
+		  }
+		else {
+			front_bottom.move(0);
+			front_top.move(0);
+			back.move(0);
+		  }
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+			left_mg.move(127);
+			right_mg.move(-127);
+			pros::delay(1000);
+		}*/
+		  
+		  pros::delay(20);
+		  		// --- Joystick control setup (Arcade Drive) ---
 		int forward = master.get_analog(ANALOG_LEFT_Y); // Right joystick up/down controls forward & backward
 		int turn = master.get_analog(ANALOG_RIGHT_X);     // Left joystick left/right controls turning
 
@@ -40,5 +105,8 @@ void opcontrol() {
 		right_mg.move(right_power);
 
 		pros::delay(20); // Runs the loop every 20ms to keep things stable (50 times per second)
-	}
-}
+		}
+	  }
+
+
+
