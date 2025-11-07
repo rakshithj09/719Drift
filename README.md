@@ -97,14 +97,14 @@ These parameters are adjustable in `autonomous()` inside `main.cpp`.
 - Eshwar Atmakuri - Assistant Programmer
 - Vishwaksen Paramkusham - Float Programmer
 - Team Members:
--   Eshwar Atmakuri
--   Harshita Chauhan
--   Prasenjit Panigrahi
--   Rakshith Jayakarthikeyan
--   Srivykunth Rubesh
--   Sujiith Selvakumar
--   Vishwaksen Paramkusham
--   Yeshwanth Mathavan
+  -   Eshwar Atmakuri
+  -   Harshita Chauhan
+  -   Prasenjit Panigrahi
+  -   Rakshith Jayakarthikeyan
+  -   Srivykunth Rubesh
+  -   Sujiith Selvakumar
+  -   Vishwaksen Paramkusham
+  -   Yeshwanth Mathavan
 
 ---
 
