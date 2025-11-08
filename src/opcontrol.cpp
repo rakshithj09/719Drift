@@ -10,7 +10,6 @@
 //
 void opcontrol() {
    pros::adi::DigitalOut piston('A'); // replace 'A' with the port used on your brain
-  
    pros::Controller master(pros::E_CONTROLLER_MASTER);
    pros::Motor front_bottom(7, pros::v5::MotorGears::blue,pros::v5::MotorUnits::degrees); // blue motor w/ degrees
    pros::Motor back(8, pros::v5::MotorGears::green,pros::v5::MotorUnits::degrees); // green motor w/ degrees
@@ -58,7 +57,7 @@ void opcontrol() {
        }
 
        // Toggle piston when button A is pressed
-       if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+       if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
                pistonState = !pistonState;
                piston.set_value(pistonState);
         }
@@ -123,6 +122,7 @@ void opcontrol() {
         double current_heading = imu_sensor.get_rotation();
         double heading_error = 0-current_heading;
         double correction = kP * heading_error;
+        //Main part of drift
         if (abs(turn) < 10 && abs(forward) > 10) {
             left_mg.move(forward + correction);
             right_mg.move(forward - correction);
