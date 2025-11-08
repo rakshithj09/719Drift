@@ -19,13 +19,18 @@
  extern pros::Motor front_top;
  extern pros::Motor back;
  
- // Simple helper to set all six drive motors at once
- static void drive_move(int power) {
-   LF.move(power); LM.move(power); LB.move(power);
-   RF.move(power); RM.move(power); RB.move(power);
+ static constexpr int RIGHT_SIGN = -1; // match driver control, right side reversed
+
+ static void drive_move(int left_power, int right_power) {
+   LF.move(left_power);
+   LM.move(left_power);
+   LB.move(left_power);
+ 
+   RF.move(RIGHT_SIGN * right_power);
+   RM.move(RIGHT_SIGN * right_power);
+   RB.move(RIGHT_SIGN * right_power);
  }
  
- // Simple helper to stop the drive
  static void drive_brake() {
    LF.brake(); LM.brake(); LB.brake();
    RF.brake(); RM.brake(); RB.brake();
@@ -44,7 +49,7 @@
  
    
    // Drive forward
-   drive_move(100);
+   drive_move(100, 100);
    pros::delay(1200); //Tells the wheel motors to stop after 1.2 seconds
  
    // Stop everything
