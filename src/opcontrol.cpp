@@ -16,10 +16,9 @@ void opcontrol() {
    pros::Motor back(8, pros::v5::MotorGears::green,pros::v5::MotorUnits::degrees); // green motor w/ degrees
    pros::Motor front_top(9, pros::v5::MotorGears::green,pros::v5::MotorUnits::degrees); // green motor w/ degrees
    pros::IMU imu_sensor(10); // IMU sensor on port 10
-   while (imu_sensor.is_calibrating())
-       {
+   while (imu_sensor.is_calibrating()) {
        pros::delay(20);
-       }
+    }
 
 
    pros::MotorGroup left_mg({1, -2, -3});
@@ -32,6 +31,10 @@ void opcontrol() {
 
    bool pistonState = false;
    bool autoTurnActive = false;
+
+   // Drift control
+   double kP = 1.3; // Adjust var(small-inaccurate; large-oscillates)
+   imu_sensor.tare_rotation(); // Sets current heading to 0 degrees
 
 
    while (true) {
@@ -54,14 +57,11 @@ void opcontrol() {
            }
        }
 
-
-      
-      
        // Toggle piston when button A is pressed
        if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
                pistonState = !pistonState;
                piston.set_value(pistonState);
-           }
+        }
         
              pros::delay(20);
 
@@ -77,31 +77,26 @@ void opcontrol() {
        // 5 watt top is clockwise
        // 5 watt watt back clockwise
        // 11 watt counterclockwise
-
-
-
-
        // Top Outtake
-       if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+       if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
        front_bottom.move(-127);
        back.move(127);
        front_top.move(-127);
        }
        // Middle Outtake
-       else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+       else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
        front_bottom.move(-127);
        back.move(127);
        front_top.move(127);
        }
 
-
        // Bottom Outtake
-       else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+       else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
        front_bottom.move(127);
        back.move(127);
        }
        // Basket Intake
-       else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+       else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
        front_bottom.move(-100);
        back.move(-127);
        }
@@ -115,20 +110,31 @@ void opcontrol() {
                // --- Joystick control setup (Arcade Drive) ---
        int forward = master.get_analog(ANALOG_LEFT_Y); // Right joystick up/down controls forward & backward
        int turn = master.get_analog(ANALOG_RIGHT_X);     // Left joystick left/right controls turning
-
-
+       //Reduce base speed to 0.8
+       double speedScale = 0.8;
        // Combine joystick inputs to control the drivetrain
-       int left_power = forward + turn;   // Left side motors get more power when turning right
-       int right_power = forward - turn;  // Right side motors get more power when turning left
+       int left_power = (forward + turn)*speedScale;   // Left side motors get more power when turning right
+       int right_power = (forward - turn)*speedScale;  // Right side motors get more power when turning left
 
 
        // Move motor groups based on joystick input unless auto turn is running
        if (!autoTurnActive) {
-           left_mg.move(left_power*.9);
-           right_mg.move(right_power);
+        // IMU Rotation
+        double current_heading = imu_sensor.get_rotation();
+        double heading_error = 0-current_heading;
+        double correction = kP * heading_error;
+        if (abs(turn) < 10 && abs(forward) > 10) {
+            left_mg.move(forward + correction);
+            right_mg.move(forward - correction);
+        }
+        else {
+            left_mg.move(forward + turn);
+            right_mg.move(forward - turn);
+            imu_sensor.tare_rotation();
        }
 
 
        pros::delay(20); // Runs the loop every 20ms to keep things stable (50 times per second)
        }
-     }
+    }
+}
