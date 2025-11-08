@@ -1,5 +1,8 @@
 #include "main.h"  
 
+pros::Motor LF(1), LM(2), LB(3), RF(4), RM(5), RB(6);
+pros::Motor front_bottom(7), front_top(9), back(8);
+
 // Includes the PROS main library header. This gives access to all PROS functions and classes.
 
 /**
