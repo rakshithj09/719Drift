@@ -1,135 +1,100 @@
 # 719D Robotics – Pushback 2025-2026
 
-Official VEX V5 codebase for Team 719D competing in the VEX Robotics Competition: Pushback (2025-2026 season).
-
-This repository contains the competition template and core control structure built using PROS in C++.
+Official VEX V5 codebase for **Team 719D** competing in the **VEX Robotics Competition: Pushback (2025-2026 season)**.  
+This repository contains all robot control logic, autonomous routines, and driver programs built using **PROS** in **C++**.
 
 ---
 
 ## Overview
 
-This project is a clean PROS competition template configured for the 719D competition robot.
-
-The code follows the official VRC structure:
-
-- initialize()
-- disabled()
-- competition_initialize()
-- autonomous()
-- opcontrol()
-
-The robot is currently configured as a drivetrain-based competition robot and ready for subsystem expansion.
+The 719D robot features a **6-motor tank drivetrain**, dual-roller intake, and an **IMU-assisted autonomous system** for precise movement and orientation.  
+This repository is organized and configured for direct competition use, following the standard VRC structure (`initialize`, `autonomous`, `opcontrol`).
 
 ---
 
-## Current Robot Configuration
+## Core Systems
 
 ### Drivetrain
-- Tank drive configuration
-- Blue gear cartridges (600 RPM)
-- Controlled through driver joystick inputs in opcontrol()
-- Designed for competition tuning and future expansion
+- 4-motor tank configuration (2 left, 2 right)
+- Tuned for accurate straight-line motion and smooth turns
 
-### Brain Display
-- LCD initialized in initialize()
-- Displays confirmation message on startup
-
-Example:
-Init OK shown on brain screen during startup
+### Intake System
+- 2-motor design: bottom and top rollers  
+- Optimized for stacking and rapid scoring
+- Controlled with L1/L2 and R1/R2 buttons during driver mode
 
 ---
 
-## Code Structure
+## Code Layout
 
 ```
 src/
 │
 ├── main.cpp                  # competition functions (init, auton, etc.)
 ├── opcontrol.cpp             # driver control logic
-├── turn_imu.cpp              # IMU-based turning helpers
-│
-├── autonomous.cpp            # placeholder
-├── initialize.cpp            # placeholder
-├── competition_initialize.cpp # placeholder
-├── disabled.cpp              # placeholder
-└── on_center_button.cpp      # placeholder
+├── autonomous              # code for autonomous routine
 ```
 
-The project follows the standard PROS layout for VEX V5.
+Only `main.cpp`, `opcontrol.cpp`, and `autonomous.cpp` contain control logic.  
+The other files exist to maintain a compliant PROS structure.
 
 ---
 
-## Autonomous
+## Autonomous Logic
 
-Autonomous currently serves as a structured placeholder.
+### Default Sequence
+1. 
 
-This allows rapid development of:
-- Timed routines
-- Sensor-based navigation
-- IMU turning
-- Competition-specific scoring routines
-
-Autonomous logic will be expanded as testing progresses.
+These parameters are adjustable in `autonomous()` inside `main.cpp`.
 
 ---
 
 ## Driver Control
 
-Driver control runs continuously in opcontrol().
-
-Current behavior:
-- Tank drive joystick control
-- Designed for modular subsystem additions
-
-Future additions may include:
-- Intake control
-- Scoring mechanisms
-- Drift correction
-- Sensor-assisted drive stabilization
+| Control | Function |
+|----------|-----------|
+| Left joystick (Y) | Forward and backward |
+| Right joystick (X) | Turning |
+| L1 | Intake in |
+| L2 | Outtake |
+| R1 | Basket to mid |
+| R2 | Basket to top |
 
 ---
 
-## Technical Details
+## Technical Notes
 
-- PROS Kernel: 4.2.1
-- PROS CLI: 3.5.x
-- Language: C++17
-- Target: VEX V5 Brain
-- Built using arm-none-eabi toolchain
+- Built using **PROS 4.x** with **C++17**
+- Designed for **VEX V5 Brain**
+- Motor configuration handled in `initialize()`
+- Standard brake modes and gearing set for blue cartridges (600 RPM)
 
 ---
 
 ## Team Information
 
-Team: 719D – Bentonville West High School  
-Season: VEX V5 Pushback (2025-2026)  
-Platform: VEX V5 + PROS  
+**Team:** 719D – Bentonville West High School  
+**Season:** VEX V5 Pushback (2025-2026)  
+**Language:** C++ with PROS  
+**Robot Type:** Competition Standard – Tank Drivetrain, Intake Mechanism
 
-Primary Contributors:
+**Primary Contributors**
 - Rakshith Jayakarthikeyan – Lead Programmer
-- Eshwar Atmakuri – Assistant Programmer
-- Vishwaksen Paramkusham – Programmer
-
-Team Members:
-- Eshwar Atmakuri
-- Harshita Chauhan
-- Prasenjit Panigrahi
-- Rakshith Jayakarthikeyan
-- Srivykunth Rubesh
-- Sujiith Selvakumar
-- Vishwaksen Paramkusham
-- Yeshwanth Mathavan
+- Vishwaksen Paramkusham - Assistant Programmer
+- Eshwar Atmakuri - Float Programmer
+- Team Members:
+  -   Eshwar Atmakuri
+  -   Harshita Chauhan
+  -   Prasenjit Panigrahi
+  -   Rakshith Jayakarthikeyan
+  -   Srivykunth Rubesh
+  -   Sujiith Selvakumar
+  -   Vishwaksen Paramkusham
+  -   Yeshwanth Mathavan
 
 ---
 
 ## Repository Purpose
 
-This repository documents the official competition code for Team 719D.
-
-It demonstrates:
-- Clean PROS structure
-- Competition compliance
-- Expandable subsystem design
-- Organized version control workflow
-
-This project will evolve as the robot is refined for competition performance.
+This repository serves as a public reference for judges, collaborators, and technical reviewers.  
+It demonstrates clean organization, consistent structure, and reliable competition-level code suitable for inspection and replication by other teams.
