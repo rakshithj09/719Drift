@@ -1,5 +1,6 @@
 #include "main.h"
 #include "globals.h"
+#include "autonomous.h"
 
 void initialize() {
 	pros::lcd::initialize();
@@ -8,4 +9,7 @@ void initialize() {
 
 void disabled() {}
 
-void competition_initialize() {}
+void competition_initialize() {
+	// Allow driver to select alliance, side and routine before match
+	run_auton_selector();
+}

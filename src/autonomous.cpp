@@ -1,34 +1,76 @@
 #include "main.h"
 #include "globals.h"
+#include "autonomous.h"
 
-void autonomous() {
-    // Start intake to collect balls
-    intake_set(100); // gentle speed to avoid drift
-    pros::delay(500); // let intake spin up
-
-    // Drive forward slowly to collect 3 balls
+static void drive_forward_time(int ms, int speed = 60) {
     pros::Motor lf(DRIVE_LF_PORT);
     pros::Motor lb(DRIVE_LB_PORT);
     pros::Motor rf(DRIVE_RF_PORT);
     pros::Motor rb(DRIVE_RB_PORT);
-    int drive_speed = 60; // slow speed to reduce drift
-    lf.move(drive_speed);
-    lb.move(drive_speed);
-    rf.move(drive_speed);
-    rb.move(drive_speed);
-    pros::delay(1800); // adjust for distance to 3 balls
-
-    // Stop drive
+    lf.move(speed);
+    lb.move(speed);
+    rf.move(speed);
+    rb.move(speed);
+    pros::delay(ms);
     lf.move(0);
     lb.move(0);
     rf.move(0);
     rb.move(0);
+}
 
-    // Keep intake running to finish collecting
-    pros::delay(500);
-
-    // Score in bottom goal (reverse intake)
-    intake_set(-100);
-    pros::delay(900); // adjust for scoring time
+// Example routines. Keep them simple and safe; tune timings on the field.
+static void skills_routine(AllianceColor color, FieldSide side) {
+    // Skills: drive forward, collect then score
+    intake_set(100);
+    drive_forward_time(1600, 80);
+    pros::delay(200);
+    // score
+    intake_set(-127);
+    pros::delay(900);
     intake_set(0);
+}
+
+static void left_lineup_routine(AllianceColor color, FieldSide side) {
+    // Left lineup: short forward, turn, score
+    intake_set(100);
+    drive_forward_time(1200, 70);
+    pros::delay(100);
+    intake_set(-127);
+    pros::delay(700);
+    intake_set(0);
+}
+
+static void right_lineup_routine(AllianceColor color, FieldSide side) {
+    // Right lineup: alternative timing for right side
+    intake_set(100);
+    drive_forward_time(1400, 70);
+    pros::delay(150);
+    intake_set(-127);
+    pros::delay(700);
+    intake_set(0);
+}
+
+void autonomous() {
+    // Choose and run the selected routine
+    AllianceColor color = get_auton_color();
+    FieldSide side = get_auton_side();
+    AutonRoutine r = get_auton_routine();
+
+    // Safety: brief delay to ensure systems ready
+    pros::delay(50);
+
+    switch (r) {
+        case AutonRoutine::SKILLS:
+            skills_routine(color, side);
+            break;
+        case AutonRoutine::LEFT_LINEUP:
+            left_lineup_routine(color, side);
+            break;
+        case AutonRoutine::RIGHT_LINEUP:
+            right_lineup_routine(color, side);
+            break;
+        default:
+            // fallback
+            skills_routine(color, side);
+    }
 }
