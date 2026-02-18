@@ -1,34 +1,55 @@
 #include "main.h"
 #include "globals.h"
+#include "auton_selector.h"
 
-void autonomous() {
-    // Start intake to collect balls
-    intake_set(100); // gentle speed to avoid drift
-    pros::delay(500); // let intake spin up
+#include <string>
 
-    // Drive forward slowly to collect 3 balls
+namespace {
+
+void run_three_ball_routine() {
+    intake_set(100);
+    pros::delay(500);
+
     pros::Motor lf(DRIVE_LF_PORT);
     pros::Motor lb(DRIVE_LB_PORT);
     pros::Motor rf(DRIVE_RF_PORT);
     pros::Motor rb(DRIVE_RB_PORT);
-    int drive_speed = 60; // slow speed to reduce drift
+    int drive_speed = 60;
     lf.move(drive_speed);
     lb.move(drive_speed);
     rf.move(drive_speed);
     rb.move(drive_speed);
-    pros::delay(1800); // adjust for distance to 3 balls
+    pros::delay(1800);
 
-    // Stop drive
     lf.move(0);
     lb.move(0);
     rf.move(0);
     rb.move(0);
 
-    // Keep intake running to finish collecting
     pros::delay(500);
 
-    // Score in bottom goal (reverse intake)
     intake_set(-100);
-    pros::delay(900); // adjust for scoring time
+    pros::delay(900);
     intake_set(0);
+}
+
+}  // namespace
+
+void autonomous() {
+    const auton::Routine routine = auton::selected();
+    const std::string name = auton::routine_name(routine);
+    pros::lcd::set_text(6, "Auton: " + name);
+
+    switch (routine) {
+        case auton::Routine::kAllianceLeft:
+        case auton::Routine::kAllianceRight:
+        case auton::Routine::kFarSide:
+            run_three_ball_routine();
+            break;
+        case auton::Routine::kSkills:
+            run_three_ball_routine();
+            pros::delay(250);
+            run_three_ball_routine();
+            break;
+    }
 }

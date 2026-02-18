@@ -1,9 +1,9 @@
 #include "main.h"
 #include "globals.h"
+#include "auton_selector.h"
 
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(0, "Init OK");
+	auton::initialize_brain_ui();
 }
 
 void disabled() {}
