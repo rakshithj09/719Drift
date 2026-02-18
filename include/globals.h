@@ -1,5 +1,6 @@
 #pragma once
 #include "main.h"
+#include "odometry.h"
 
 // ===== 4 MOTOR DRIVETRAIN =====
 // Ports from your wiring

@@ -1,10 +1,13 @@
 #include "main.h"
 #include "globals.h"
+#include "odometry.h"
 
 void autonomous() {
     // Start intake to collect balls
     intake_set(100); // gentle speed to avoid drift
     pros::delay(500); // let intake spin up
+
+    odom::odometry.reset(0.0, 0.0, 0.0);
 
     // Drive forward slowly to collect 3 balls
     pros::Motor lf(DRIVE_LF_PORT);
