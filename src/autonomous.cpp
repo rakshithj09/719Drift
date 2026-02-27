@@ -1,6 +1,6 @@
-#include "main.h"
+// #include "main.h"
 #include "globals.h"
-#include "autonomous.h"
+// #include "autonomous.h"
 
 static void drive_forward_time(int ms, int speed = 60) {
     pros::Motor lf(DRIVE_LF_PORT);
